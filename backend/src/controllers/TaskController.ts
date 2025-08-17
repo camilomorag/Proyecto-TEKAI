@@ -1,10 +1,10 @@
+// src/controllers/TaskController.ts
 import { Request, Response } from "express";
 import { TaskUseCases } from "../usecases/TaskUseCases";
 import { validateTaskInput } from "../validators/TaskValidator";
 
 const taskUseCases = new TaskUseCases();
 
-// Asegúrate de que la clase esté exportada con 'export'
 export class TaskController {
   async create(req: Request, res: Response) {
     try {
@@ -22,12 +22,23 @@ export class TaskController {
   }
 
   async update(req: Request, res: Response) {
-    const updated = await taskUseCases.updateTask(Number(req.params.id), req.body);
-    res.json(updated);
+    try {
+      const updated = await taskUseCases.updateTask(Number(req.params.id), req.body);
+      res.json(updated);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
   }
 
   async delete(req: Request, res: Response) {
-    await taskUseCases.deleteTask(Number(req.params.id));
-    res.json({ message: "Tarea eliminada" });
+    try {
+      await taskUseCases.deleteTask(Number(req.params.id));
+      res.json({ message: "Tarea eliminada" });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
   }
 }
+
+// Exporta también una instancia por si acaso
+export const taskController = new TaskController();

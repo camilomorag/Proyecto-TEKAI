@@ -4,13 +4,16 @@ import { CreateTaskInput, Estado, Task } from "../types";
 
 type Status = "idle" | "loading" | "error";
 
-interface TaskState {
+export interface TaskState {  // Asegúrate de que esté exportado
   items: Task[];
   status: Status;
   error?: string;
 }
 
-const initialState: TaskState = { items: [], status: "idle" };
+const initialState: TaskState = {  // No necesitas exportar initialState a menos que lo uses fuera
+  items: [],
+  status: 'idle',
+};
 
 export const fetchTasks = createAsyncThunk("tasks/fetch", async () => {
   return await taskService.list();
