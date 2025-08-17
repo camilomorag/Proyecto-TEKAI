@@ -4,6 +4,7 @@ import { validateTaskInput } from "../validators/TaskValidator";
 
 const taskUseCases = new TaskUseCases();
 
+// Asegúrate de que la clase esté exportada con 'export'
 export class TaskController {
   async create(req: Request, res: Response) {
     try {
