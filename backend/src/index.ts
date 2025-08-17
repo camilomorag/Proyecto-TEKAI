@@ -19,10 +19,7 @@ const options = {
       description: 'Documentación de la API para el sistema Kanban de TEKAI',
     },
     servers: [
-      {
-        url: 'http://localhost:3001',
-        description: 'Servidor de desarrollo',
-      },
+      { url: 'http://localhost:3001', description: 'Servidor de desarrollo' }
     ],
     components: {
       schemas: {
@@ -33,18 +30,19 @@ const options = {
             titulo: { type: 'string', example: 'Crear frontend' },
             descripcion: { type: 'string', example: 'Diseñar la interfaz Kanban' },
             estado: { 
-              type: 'string', 
+              type: 'string',
               enum: ['Creada', 'En progreso', 'Bloqueada', 'Finalizada', 'Cancelada'],
               example: 'Creada'
             },
             responsable: { type: 'string', example: 'Juan Henao' },
             fechaCreacion: { type: 'string', format: 'date-time', example: '2025-08-14T10:00:00Z' }
-          }
+          },
+          required: ['titulo', 'descripcion', 'estado', 'responsable']
         }
       }
     }
   },
-  apis: ['./src/routes/*.ts'], // Solo busca en routes (o usa rutas absolutas si es necesario)
+  apis: ['./src/routes/*.ts'],
 };
 
 const specs = swaggerJsdoc(options);
@@ -52,9 +50,8 @@ const specs = swaggerJsdoc(options);
 AppDataSource.initialize()
   .then(() => {
     console.log("📦 Base de datos conectada");
-    
+
     app.use('/api/tareas', taskRoutes);
-    // Ruta para la documentación Swagger UI
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
     app.listen(3001, () => {
@@ -62,4 +59,4 @@ AppDataSource.initialize()
       console.log("📚 Documentación API en http://localhost:3001/api-docs");
     });
   })
-  .catch((error) => console.log(error));
+  .catch((error) => console.error("❌ Error al conectar la base de datos:", error));
